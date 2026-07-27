@@ -15,7 +15,7 @@ export function Response(data: {
 }
 
 export function PrismaErrorResponse(error: unknown) {
-  let message = "";
+  let message = "Internal server error";
   let status = 500;
 
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
