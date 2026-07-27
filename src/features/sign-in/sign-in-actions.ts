@@ -7,7 +7,6 @@ import { prisma } from "@/lib/prisma";
 import { PrismaErrorResponse, Response } from "@/lib/response-handler";
 import type { ResponseWithoutData } from "@/models/response-model";
 import type { SignInSchema } from "./sign-in-schemas";
-import { NextResponse } from "next/server";
 
 const secret = new TextEncoder().encode(JWT_SECRET);
 
