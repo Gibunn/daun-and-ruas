@@ -2,9 +2,9 @@ import z from "zod";
 
 export const signUpSchema = z
   .object({
-    fullname: z.string(),
+    fullname: z.string().min(1, "Nama lengkap tidak boleh kosong"),
     email: z.email("Format email tidak valid"),
-    phone_number: z.string(),
+    phone_number: z.string().min(1, "No. WhatsApp tidak boleh kosong"),
     password: z.string().min(8, "Password minimal harus 8 karakter"),
     confirm_password: z.string(),
   })
