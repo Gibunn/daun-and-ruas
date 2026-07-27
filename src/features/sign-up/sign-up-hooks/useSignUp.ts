@@ -1,4 +1,4 @@
-import { useActionState } from "react";
+import { startTransition, useActionState } from "react";
 import { signUp } from "../sign-up-actions";
 import { useSignUpForm } from "./useSignUpForm";
 
@@ -11,13 +11,17 @@ export default function useSignUp() {
     formState: { errors },
   } = useSignUpForm();
 
-  const [_, formAction, isPending] = useActionState(signUp, null);
+  const [state, formAction, isPending] = useActionState(signUp, null);
 
-  const onSubmit = handleSubmit((data) => formAction(data));
+  const onSubmit = handleSubmit((data) =>
+    startTransition(() => {
+      formAction(data);
+    }),
+  );
 
   return {
     event: { onSubmit },
-    action: { isPending },
+    action: { isPending, state },
     reactHookForm: { register, watch, setValue, errors },
   };
 }
