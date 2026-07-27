@@ -1,3 +1,4 @@
+"use server";
 import { comparePassword } from "@/lib/bcrypt";
 import { prisma } from "@/lib/prisma";
 import { PrismaErrorResponse, Response } from "@/lib/response-handler";
@@ -11,17 +12,28 @@ export async function signIn(
   try {
     const user = await prisma.user.findFirst({ where: { email: data.email } });
 
-    const compareResult = comparePassword(data.password, user?.password ?? "");
+    const compareResult = await comparePassword(
+      data.password,
+      user?.password ?? "",
+    );
 
-    console.log(compareResult);
+    if (!compareResult)
+      return Response({
+        success: false,
+        status: 400,
+        message: "Email atau password salah",
+      });
 
-    return { success: true, status: 200, message: "" };
+    return { success: true, status: 200, message: "Berhasil login" };
   } catch (e) {
     const prismaResponse = PrismaErrorResponse(e);
     return Response({
       success: false,
       status: prismaResponse.status,
-      message: prismaResponse.message,
+      message:
+        prismaResponse.status === 400
+          ? "Email atau password salah"
+          : prismaResponse.message,
     });
   }
 }
