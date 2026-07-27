@@ -7,7 +7,7 @@ export default function AuthFormCard({
 }) {
   return (
     <div className="w-125 p-12 rounded-3xl bg-white border border-[#E1E5E1]">
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center mb-4">
         <Image
           width={193}
           height={30}
