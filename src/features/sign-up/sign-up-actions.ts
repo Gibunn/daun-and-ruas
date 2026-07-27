@@ -1,7 +1,7 @@
 "use server";
 import { hashPassword } from "@/lib/bcrypt";
 import { prisma } from "@/lib/prisma";
-import { Response } from "@/lib/response-handler";
+import { PrismaErrorResponse, Response } from "@/lib/response-handler";
 import type {
   ResponseWithData,
   ResponseWithoutData,
@@ -14,7 +14,6 @@ export async function signUp(
 ) {
   try {
     const hashedPassword = await hashPassword(data.password);
-
     await prisma.user.create({
       data: {
         email: data.email,
@@ -24,8 +23,13 @@ export async function signUp(
       },
     });
 
-    return Response({ success: true, message: "Success sign up" });
-  } catch {
-    return Response({ success: false, message: "Failed sign up" });
+    return Response({ success: true, status: 201, message: "Success sign up" });
+  } catch (e) {
+    const prismaResponse = PrismaErrorResponse(e);
+    return Response({
+      success: false,
+      status: prismaResponse.status,
+      message: prismaResponse.message,
+    });
   }
 }

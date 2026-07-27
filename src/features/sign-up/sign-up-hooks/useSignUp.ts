@@ -13,6 +13,8 @@ export default function useSignUp() {
 
   const [state, formAction, isPending] = useActionState(signUp, null);
 
+  console.log(state);
+
   const onSubmit = handleSubmit((data) =>
     startTransition(() => {
       formAction(data);
