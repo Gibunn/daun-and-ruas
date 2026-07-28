@@ -3,7 +3,11 @@ import { signIn } from "../sign-in-actions";
 import { useSignInForm } from "./useSignInForm";
 
 export function useSignIn() {
-  const { register, handleSubmit } = useSignInForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useSignInForm();
 
   const [state, formAction, pending] = useActionState(signIn, null);
 
@@ -13,7 +17,7 @@ export function useSignIn() {
 
   return {
     event: { onSubmit },
-    reactHookForm: { register },
+    reactHookForm: { register, errors },
     action: { formAction, state, pending },
   };
 }
