@@ -1,6 +1,7 @@
 "use client";
 import AuthFormCard from "@/shared/AuthFormCard";
 import { useSignIn } from "../sign-in-hooks/useSignIn";
+import { Input } from "@/shared/Input";
 
 export default function SignInForm() {
   const { event, reactHookForm } = useSignIn();
@@ -19,10 +20,11 @@ export default function SignInForm() {
 
         <div className="flex flex-col gap-2 mb-5">
           <label htmlFor="email">Email</label>
-          <input
+          <Input
             id="email"
             placeholder="nama@email.com"
             {...reactHookForm.register("email")}
+            className="py-3 px-4 font-['Figtree']"
           />
         </div>
 
