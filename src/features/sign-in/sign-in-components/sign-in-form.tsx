@@ -8,7 +8,7 @@ import { useSignIn } from "../sign-in-hooks/useSignIn";
 import SignInFormSeparator from "./sign-in-form-separator";
 
 export default function SignInForm() {
-  const { event, reactHookForm } = useSignIn();
+  const { action, event, reactHookForm } = useSignIn();
 
   return (
     <AuthFormCard>
@@ -30,15 +30,18 @@ export default function SignInForm() {
             {...reactHookForm.register("email")}
             className="py-3 px-4"
           />
+          {action.state?.status === 400 && <span className="text-red-500 text-sm">{action.state.message}</span>}
         </div>
 
         <div className="flex flex-col gap-2 mb-5 font-figtree">
           <label htmlFor="password" className="font-semibold">Password</label>
           <InputPassword
             id="password"
+            inputClassName="py-3 pl-4"
             placeholder="Masukkan password"
             {...reactHookForm.register("password")}
-            inputClassName="py-3 pl-4" />
+          />
+          {action.state?.status === 400 && <span className="text-red-500 text-sm">{action.state.message}</span>}
         </div>
 
         <div className="flex justify-between font-figtree">

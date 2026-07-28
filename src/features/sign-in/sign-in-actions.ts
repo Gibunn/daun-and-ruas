@@ -1,6 +1,7 @@
 "use server";
 import { SignJWT } from "jose";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { comparePassword } from "@/lib/bcrypt";
 import { JWT_SECRET } from "@/lib/constants";
 import { prisma } from "@/lib/prisma";
@@ -14,6 +15,8 @@ export async function signIn(
   _prevState: ResponseWithoutData | null,
   data: SignInSchema,
 ): Promise<ResponseWithoutData | null> {
+  let isSuccess = false;
+
   try {
     const user = await prisma.user.findFirst({ where: { email: data.email } });
 
@@ -53,11 +56,11 @@ export async function signIn(
       maxAge: 60 * 60 * 24 * 7,
     });
 
-    return { success: true, status: 200, message: "Berhasil login" };
+    isSuccess = true;
   } catch (e) {
     const prismaResponse = PrismaErrorResponse(e);
     return Response({
-      success: false,
+      success: isSuccess,
       status: prismaResponse.status,
       message:
         prismaResponse.status === 400
@@ -65,4 +68,10 @@ export async function signIn(
           : prismaResponse.message,
     });
   }
+
+  if (isSuccess) {
+    redirect("/");
+  }
+
+  return null;
 }

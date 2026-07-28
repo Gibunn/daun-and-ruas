@@ -4,6 +4,11 @@ import { NextResponse } from "next/server";
 export function proxy(request: NextRequest) {
   const token = request.cookies.get("session");
 
+  if (token && request.nextUrl.pathname.startsWith("/sign-in")) {
+    console.log("masuk");
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
   if (!token && request.nextUrl.pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
@@ -12,5 +17,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/dashboard", "/dashboard/profile/:path*"],
+  matcher: ["/", "/sign-in", "/dashboard", "/dashboard/profile/:path*"],
 };
