@@ -2,7 +2,7 @@ import { startTransition, useActionState } from "react";
 import { signUp } from "../sign-up-actions";
 import { useSignUpForm } from "./useSignUpForm";
 
-export default function useSignUp() {
+export function useSignUp() {
   const {
     watch,
     register,

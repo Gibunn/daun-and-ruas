@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import { Fraunces } from "next/font/google";
 import "./globals.css";
-
-const fraunces = Fraunces({ subsets: ["latin"] });
+import { figtree, fraunces } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,7 +13,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${fraunces.className} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${fraunces.className} ${figtree.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

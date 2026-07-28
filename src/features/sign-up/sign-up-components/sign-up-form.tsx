@@ -1,6 +1,5 @@
 "use client";
-
-import useSignUp from "../sign-up-hooks/useSignUp";
+import { useSignUp } from "../sign-up-hooks/useSignUp";
 
 export default function SignUpForm() {
   const { action, event, reactHookForm } = useSignUp();
