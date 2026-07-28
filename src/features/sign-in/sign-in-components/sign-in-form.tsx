@@ -1,7 +1,8 @@
 "use client";
 import AuthFormCard from "@/shared/AuthFormCard";
-import { useSignIn } from "../sign-in-hooks/useSignIn";
 import { Input } from "@/shared/Input";
+import { useSignIn } from "../sign-in-hooks/useSignIn";
+import { InputPassword } from "@/shared/InputPassword";
 
 export default function SignInForm() {
   const { event, reactHookForm } = useSignIn();
@@ -30,12 +31,7 @@ export default function SignInForm() {
 
         <div className="flex flex-col gap-2">
           <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            placeholder="Masukkan password"
-            {...reactHookForm.register("password")}
-          />
+          <InputPassword id="password" placeholder="Masukkan password" {...reactHookForm.register("password")} inputClassName="py-3 pl-4 font-['Figtree']" />
         </div>
 
         <button className="mt-8" type="submit">
