@@ -7,13 +7,17 @@ import type {
   ResponseWithoutData,
 } from "@/models/response-model";
 import type { SignUpSchema } from "./sign-up-schemas";
+import { redirect } from "next/navigation";
 
 export async function signUp(
   _prevState: ResponseWithData | ResponseWithoutData | null,
   data: SignUpSchema,
 ) {
+  let isSuccess = false;
+
   try {
     const hashedPassword = await hashPassword(data.password);
+
     await prisma.user.create({
       data: {
         email: data.email,
@@ -23,13 +27,19 @@ export async function signUp(
       },
     });
 
-    return Response({ success: true, status: 201, message: "Success sign up" });
+    isSuccess = true;
   } catch (e) {
+    console.log(e);
     const prismaResponse = PrismaErrorResponse(e);
+
     return Response({
       success: false,
       status: prismaResponse.status,
       message: prismaResponse.message,
     });
   }
+
+  if (isSuccess) redirect("/sign-in");
+
+  return null;
 }
