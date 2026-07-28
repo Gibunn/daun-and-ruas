@@ -12,13 +12,20 @@ model User {
   fullname     String
   email        String  @unique
   phone_number String
+  active       Boolean
   password     String
   is_admin     Boolean @default(false)
 
-  addressTables AddressTable[]
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  address        Address[]
+  customer_notes CustomerNotes[]
+  orders         Order[]
+  cart           Cart[]
 }
 
-model AddressTable {
+model Address {
   id               String  @id @default(cuid())
   address_label    String
   receiver_name    String
@@ -30,6 +37,83 @@ model AddressTable {
   postal_code      String
   main_address     Boolean @default(false)
 
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
   user    User   @relation(fields: [user_id], references: [id])
   user_id String
+}
+
+model CustomerNotes {
+  id    String @id @default(cuid())
+  notes String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+}
+
+model Category {
+  id          String  @id @default(cuid())
+  name        String
+  description String
+  active      Boolean
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  product Product[]
+}
+
+model Product {
+  id            String  @id @default(cuid())
+  name          String
+  price         Int
+  size          String
+  stock         Int
+  weight_gram   Int
+  description   String
+  prodcut_image String
+  active        Boolean
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  category_id String
+  category    Category @relation(fields: [category_id], references: [id])
+
+  order Order[]
+}
+
+model Order {
+  id                     String @id @default(cuid())
+  order_number           String
+  receipt_number         String
+  total                  Int
+  sub_total              Int
+  shipping_cost          Int
+  shipping_cost_discount Int
+  courier                String
+  payment                String
+  status                 String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  customer_id String
+  customer    User   @relation(fields: [customer_id], references: [id])
+
+  product Product[]
+}
+
+model Cart {
+  id String @id @default(cuid())
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  customer_id String
+  customer    User   @relation(fields: [customer_id], references: [id])
 }
