@@ -17,12 +17,12 @@ model User {
   is_admin     Boolean @default(false)
 
   created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
-  address        Address[]
-  customer_notes CustomerNotes[]
+  addresses      Address[]
+  customer_notes CustomerNote[]
   orders         Order[]
-  cart           Cart[]
+  carts          Cart[]
 }
 
 model Address {
@@ -38,18 +38,18 @@ model Address {
   main_address     Boolean @default(false)
 
   created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   user    User   @relation(fields: [user_id], references: [id])
   user_id String
 }
 
-model CustomerNotes {
+model CustomerNote {
   id    String @id @default(cuid())
   notes String
 
   created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   user    User   @relation(fields: [user_id], references: [id])
   user_id String
@@ -62,58 +62,98 @@ model Category {
   active      Boolean
 
   created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
-  product Product[]
+  products Product[]
 }
 
 model Product {
-  id            String  @id @default(cuid())
-  name          String
-  price         Int
-  size          String
-  stock         Int
-  weight_gram   Int
-  description   String
-  prodcut_image String
-  active        Boolean
+  id          String  @id @default(cuid())
+  name        String
+  description String
+  active      Boolean
 
   created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   category_id String
   category    Category @relation(fields: [category_id], references: [id])
 
-  order Order[]
+  product_variants ProductVariant[]
 }
 
-model Order {
-  id                     String @id @default(cuid())
-  order_number           String
-  receipt_number         String
-  total                  Int
-  sub_total              Int
-  shipping_cost          Int
-  shipping_cost_discount Int
-  courier                String
-  payment                String
-  status                 String
+model ProductVariant {
+  id               String  @id @default(cuid())
+  size             String
+  size_description String
+  price            Decimal
+  stock            Int
+  weight           Int
+  product_image    String
 
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  product_id String
+  product    Product @relation(fields: [product_id], references: [id])
 
-  customer_id String
-  customer    User   @relation(fields: [customer_id], references: [id])
-
-  product Product[]
+  cart_items  CartItem[]
+  order_items OrderItem[]
 }
 
 model Cart {
   id String @id @default(cuid())
 
   created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   customer_id String
   customer    User   @relation(fields: [customer_id], references: [id])
+
+  cart_items CartItem[]
+}
+
+model CartItem {
+  id String @id @default(cuid())
+
+  quantity Int
+
+  cart_id String
+  cart    Cart   @relation(fields: [cart_id], references: [id])
+
+  product_variant_id String
+  product_variant    ProductVariant @relation(fields: [product_variant_id], references: [id])
+}
+
+model Order {
+  id                     String  @id @default(cuid())
+  order_number           String
+  receipt_number         String
+  total_price            Decimal
+  sub_total_price        Decimal
+  shipping_cost          Decimal
+  shipping_cost_discount Decimal
+  courier                String
+  payment                String
+  status                 String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  customer_id String
+  customer    User   @relation(fields: [customer_id], references: [id])
+
+  order OrderItem[]
+}
+
+model OrderItem {
+  id String @id @default(cuid())
+
+  product_name      String
+  quantity          Int
+  price_at_purchase Decimal
+  variant_size      String
+
+  order_id String
+  order    Order  @relation(fields: [order_id], references: [id])
+
+  product_variant_id String
+  product_variant    ProductVariant @relation(fields: [product_variant_id], references: [id])
 }
